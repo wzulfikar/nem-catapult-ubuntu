@@ -1,13 +1,14 @@
 # NEM Catapult Server - Ubuntu 16.04
 
-For those who want to build and run catapult server without docker.
-Based on https://github.com/nemtech/catapult-server
+For those who want to build and run catapult server ***without docker***. Based on:
+
+- https://github.com/nemtech/catapult-server
+- https://github.com/44uk/catapult-server-docker
 
 ### Usage
 
 - deploy an Ubuntu 16.04 (64 bit) server
-- copy the `Makefile` to that server (ie. `~/Makefile`)
-  - or just use this command to download it from your server:
+- copy the `Makefile` to that server (ie. `~/Makefile`). Or, just use this command and download it from your server:
 
     ```
     curl -O https://raw.githubusercontent.com/wzulfikar/nem-catapult-ubuntu/master/Makefile
