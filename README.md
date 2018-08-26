@@ -22,38 +22,42 @@ Once finished, your `/opt` directory will look like this:
 ```
 ▸ /opt
   ▾ catapult
-    ▾ catapult-server
-      ▾ bin
+    ▾ bin
         [catapult binaries]
     ▾ resources
-      [resources-related config files]
+        [resources-related config files]
     ▾ tools
-      [tools-related config files]
+        [tools-related config files]
+    ▾ tests
+        [catapult test files]
     ▾ data
-      [catapult-related data]
-    ▾ seed
-      [catapult-related data]
+        [catapult-related data]
 ```
 
 ### Booting Up The Catapult
 
-1. open the sample config file at `/opt/catapult/tools/nemgen/resources/mijin-test.properties`
+1. open the sample config file at `/opt/catapult-server/tools/nemgen/resources/mijin-test.properties`
 2. adjust the value of `cppFile` and `binDirectory` to become like this:
 
   ```
   [output]
   cppFile = /opt/catapult-server/tests/test/core/mocks/MockMemoryBasedStorage_data.h
-  binDirectory = /opt/catapult/data
+  binDirectory = /tmp
   ```
 
-3. generate nemesis block. as an example, we'll use the sample config from catapult repo: `make nemesis config=/opt/catapult/tools/nemgen/resources/mijin-test.properties`
+3. generate nemesis block. as an example, we'll use the sample config from catapult repo:
+
+  ```
+  make nemesis config=/opt/catapult/tools/nemgen/resources/mijin-test.properties
+  ```
+
 4. run catapult server: `make up`
 
 ### Notes
 
 - The order of packages installed in `Makefile` has been put in such a way that packages with dependencies will be installed first (ie. some scripts need to use cmake, mongoc needs `boost` to be available, etc.). This means that changing the order of installation might break the script.
 
-- Catapult seems to require a specific version of packages. Changing the version of packages might break the build process
+- Catapult seems to require a specific version of packages. Changing the version of packages might break the build process.
 
 - This approach has been tested in 4 different vps (bare metal):
 

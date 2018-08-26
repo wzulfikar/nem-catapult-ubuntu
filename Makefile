@@ -3,14 +3,26 @@ WORKDIR := /opt/catapult
 
 ### utilities ###
 up:
-	cd ${WORKDIR}/catapult-server/bin && ./catapult.server
+	cd ${WORKDIR}/bin && ./catapult.server
 
 nemesis:
 	@echo "generating nemesis block.."
 	@echo "usage: make nemesis config=/path/to/catapult-config.properties"
+	@echo ""
+	@echo "Once completed, please copy the '00000' folder from your config's 'binDirectory' to '${WORKDIR}/data':"
+	@echo "cp -r /path/to/00000 ${WORKDIR}/data"
+	@echo ""
+	@echo "KNOWN ISSUE:"
+	@echo "ignore if there is 'hashes.dat has invalid size' error."
+	@echo "just proceed to the “copy '00000' folder” step above"
+	@echo ""
+	@echo "(waiting 5 seconds for you you to read the instruction..)"
+	@echo "press ctrl+c to cancel nemesis generation"
+
+	@sleep 5
 
 	# sample config: ${WORKDIR}/tools/nemgen/resources/mijin-test.properties
-	${WORKDIR}/bin/catapult.tools.nemgen ${config}
+	@${WORKDIR}/bin/catapult.tools.nemgen ${config}
 
 	@echo "✔ nemesis block has been generated"
 
@@ -35,19 +47,25 @@ parallel-install-step-2: install-gtest install-rocksdb install-zmqlib install-mo
 
 workdir:
 	@echo "→ creating work directory for catapult.."
-	# create dir for data & mijin test seed
-	mkdir -p ${WORKDIR}/catapult-server
+
+	mkdir -p ${WORKDIR}/data
+
+	# make dir to store seed if using mijin test
+	mkdir -p ${WORKDIR}/seed/mijin-test
 
 	# make catapult_server available at ${WORKDIR}
-	cp ${TMP_DIR}/catapult-server/_build/* ${WORKDIR}/catapult-server
+	cp -r ${TMP_DIR}/catapult-server/_build/* ${WORKDIR}
 
-	# move resources & tools dir to ${WORKDIR} (both contain catapult config files)
-	cp ${TMP_DIR}/catapult-server/resources ${WORKDIR}
-	cp ${TMP_DIR}/catapult-server/tools ${WORKDIR}
+	# move required dirs to ${WORKDIR} (dirs containing config files, test files, etc.)
+	if [ -d ${WORKDIR}/resources ]; then rm -r ${WORKDIR}/resources; fi
+	cp -r ${TMP_DIR}/catapult-server/resources ${WORKDIR}
 
-	# create dirs for catapult-related operations
-	mkdir -p ${WORKDIR}/seed/mijin-test
-	mkdir -p ${WORKDIR}/data
+	if [ -d ${WORKDIR}/tools ]; then rm -r ${WORKDIR}/tools; fi
+	cp -r ${TMP_DIR}/catapult-server/tools ${WORKDIR}
+
+	if [ -d ${WORKDIR}/tests ]; then rm -r ${WORKDIR}/tests; fi
+	cp -r ${TMP_DIR}/catapult-server/tests ${WORKDIR}
+
 	@echo "✔ work directory created!"
 
 ### installation details ###
