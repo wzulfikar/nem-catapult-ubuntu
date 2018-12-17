@@ -152,24 +152,24 @@ install-cppzmq:
 	@echo "✔ done: cppzmq v4.2.3 is installed"
 
 install-mongoc:
-	@echo "→ installing: mongoc 1.4.3"
+	@echo "→ installing: mongoc 1.11.0"
 	if [ ! -d ${TMP_DIR}/mongo-c-driver ]; then cd ${TMP_DIR} \
-		&& git clone https://github.com/mongodb/mongo-c-driver.git -b 1.4.3 --depth 1; fi
+		&& git clone https://github.com/mongodb/mongo-c-driver.git -b 1.11.0 --depth 1; fi
 
-	cd ${TMP_DIR}/mongo-c-driver \
-		&& ./autogen.sh && ./configure --disable-automatic-init-and-cleanup --prefix=/usr/local \
+	cd ${TMP_DIR}/mongo-c-driver/build \
+		&& cmake -DCMAKE_BUILD_TYPE="Release" -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_INSTALL_PREFIX=/usr/local .. \
 	  && make -j4 && make install
-	@echo "✔ done: mongoc 1.4.3 is installed"
+	@echo "✔ done: mongoc 1.11.0 is installed"
 
 install-mongocxx:
-	@echo "→ installing: mongocxx r3.0.2"
+	@echo "→ installing: mongocxx r3.3"
 	if [ ! -d ${TMP_DIR}/mongo-cxx-driver ]; then cd ${TMP_DIR} \
-		&& git clone https://github.com/mongodb/mongo-cxx-driver.git -b r3.0.2 --depth 1; fi
+		&& git clone https://github.com/mongodb/mongo-cxx-driver.git -b releases/v3.3 --depth 1; fi
 
 	cd ${TMP_DIR}/mongo-cxx-driver/build \
 	  && cmake -DBSONCXX_POLY_USE_BOOST=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. \
 	  && make -j4 && make install
-	@echo "✔ done: mongocxx r3.0.2 is installed"
+	@echo "✔ done: mongocxx r3.3 is installed"
 
 install-catapult:
 	@echo "→ installing: catapult (master)"
@@ -177,7 +177,7 @@ install-catapult:
 		&& git clone https://github.com/nemtech/catapult-server.git -b master --depth 1; fi
 
 	cd ${TMP_DIR}/catapult-server && mkdir -p _build && cd _build \
-  	&& cmake -DCMAKE_BUILD_TYPE=RelWithDebugInfo \
+  	&& cmake -DCMAKE_BUILD_TYPE=Release \
 	    -DCMAKE_CXX_FLAGS="-pthread" \
 	    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
 	    -DBSONCXX_LIB=/usr/local/lib/libbsoncxx.so \
