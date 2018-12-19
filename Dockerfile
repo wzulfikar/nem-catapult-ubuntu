@@ -35,7 +35,7 @@ FROM ubuntu:18.04
 
 RUN mkdir -p /catapult
 
-COPY --from=builder /var/app/src/_build/bin/ /catapult
+COPY --from=builder /opt/catapult/bin/ /catapult
 COPY --from=builder /tmp/deps/ /catapult
 COPY --from=builder /tmp/localdep/ /usr/local/lib
 
